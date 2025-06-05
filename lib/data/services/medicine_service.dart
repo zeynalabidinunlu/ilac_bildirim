@@ -71,4 +71,8 @@ class MedicineService {
   Future<List<Medicine>> getMedicinesByUsageType(UsageType usageType) async {
     return isar.medicines.filter().usageTypeElementEqualTo(usageType).findAll();
   }
+
+  Future<List<Medicine>> getMedicinesByActiveStatus(bool isActive) async {
+    return isar.medicines.filter().isActiveEqualTo(isActive).findAll();
+  }
 }

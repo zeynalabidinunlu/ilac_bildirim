@@ -5,6 +5,6 @@ enum UsageType {
   SABAH,
   OGLE,
   AKSAM,
-  SABAH_OGLE_AKSAM,
+ 
 }
 

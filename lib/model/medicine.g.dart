@@ -22,23 +22,43 @@ const MedicineSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'endDate': PropertySchema(
       id: 1,
+      name: r'endDate',
+      type: IsarType.dateTime,
+    ),
+    r'isActive': PropertySchema(
+      id: 2,
+      name: r'isActive',
+      type: IsarType.bool,
+    ),
+    r'name': PropertySchema(
+      id: 3,
       name: r'name',
       type: IsarType.string,
     ),
     r'notificationText': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'notificationText',
       type: IsarType.string,
     ),
     r'notificationTimes': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'notificationTimes',
       type: IsarType.dateTimeList,
     ),
+    r'numberOfPills': PropertySchema(
+      id: 6,
+      name: r'numberOfPills',
+      type: IsarType.long,
+    ),
+    r'startDate': PropertySchema(
+      id: 7,
+      name: r'startDate',
+      type: IsarType.dateTime,
+    ),
     r'usageType': PropertySchema(
-      id: 4,
+      id: 8,
       name: r'usageType',
       type: IsarType.stringList,
       enumMap: _MedicineusageTypeEnumValueMap,
@@ -110,11 +130,15 @@ void _medicineSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.description);
-  writer.writeString(offsets[1], object.name);
-  writer.writeString(offsets[2], object.notificationText);
-  writer.writeDateTimeList(offsets[3], object.notificationTimes);
+  writer.writeDateTime(offsets[1], object.endDate);
+  writer.writeBool(offsets[2], object.isActive);
+  writer.writeString(offsets[3], object.name);
+  writer.writeString(offsets[4], object.notificationText);
+  writer.writeDateTimeList(offsets[5], object.notificationTimes);
+  writer.writeLong(offsets[6], object.numberOfPills);
+  writer.writeDateTime(offsets[7], object.startDate);
   writer.writeStringList(
-      offsets[4], object.usageType?.map((e) => e.name).toList());
+      offsets[8], object.usageType?.map((e) => e.name).toList());
 }
 
 Medicine _medicineDeserialize(
@@ -125,12 +149,16 @@ Medicine _medicineDeserialize(
 ) {
   final object = Medicine();
   object.description = reader.readStringOrNull(offsets[0]);
+  object.endDate = reader.readDateTimeOrNull(offsets[1]);
   object.id = id;
-  object.name = reader.readStringOrNull(offsets[1]);
-  object.notificationText = reader.readStringOrNull(offsets[2]);
-  object.notificationTimes = reader.readDateTimeList(offsets[3]);
+  object.isActive = reader.readBoolOrNull(offsets[2]);
+  object.name = reader.readStringOrNull(offsets[3]);
+  object.notificationText = reader.readStringOrNull(offsets[4]);
+  object.notificationTimes = reader.readDateTimeList(offsets[5]);
+  object.numberOfPills = reader.readLongOrNull(offsets[6]);
+  object.startDate = reader.readDateTimeOrNull(offsets[7]);
   object.usageType = reader
-      .readStringList(offsets[4])
+      .readStringList(offsets[8])
       ?.map((e) => _MedicineusageTypeValueEnumMap[e] ?? UsageType.SABAH)
       .toList();
   return object;
@@ -146,12 +174,20 @@ P _medicineDeserializeProp<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 3:
-      return (reader.readDateTimeList(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
+      return (reader.readDateTimeList(offset)) as P;
+    case 6:
+      return (reader.readLongOrNull(offset)) as P;
+    case 7:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 8:
       return (reader
           .readStringList(offset)
           ?.map((e) => _MedicineusageTypeValueEnumMap[e] ?? UsageType.SABAH)
@@ -165,13 +201,11 @@ const _MedicineusageTypeEnumValueMap = {
   r'SABAH': r'SABAH',
   r'OGLE': r'OGLE',
   r'AKSAM': r'AKSAM',
-  r'SABAH_OGLE_AKSAM': r'SABAH_OGLE_AKSAM',
 };
 const _MedicineusageTypeValueEnumMap = {
   r'SABAH': UsageType.SABAH,
   r'OGLE': UsageType.OGLE,
   r'AKSAM': UsageType.AKSAM,
-  r'SABAH_OGLE_AKSAM': UsageType.SABAH_OGLE_AKSAM,
 };
 
 Id _medicineGetId(Medicine object) {
@@ -412,6 +446,75 @@ extension MedicineQueryFilter
     });
   }
 
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> endDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> endDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> endDateEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> endDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> endDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> endDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'endDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Medicine, Medicine, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -460,6 +563,32 @@ extension MedicineQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> isActiveIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isActive',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> isActiveIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isActive',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> isActiveEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isActive',
+        value: value,
       ));
     });
   }
@@ -927,6 +1056,147 @@ extension MedicineQueryFilter
     });
   }
 
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      numberOfPillsIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'numberOfPills',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      numberOfPillsIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'numberOfPills',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> numberOfPillsEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numberOfPills',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      numberOfPillsGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numberOfPills',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> numberOfPillsLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numberOfPills',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> numberOfPillsBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numberOfPills',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> startDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'startDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> startDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'startDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> startDateEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'startDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> startDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'startDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> startDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'startDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> startDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'startDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1187,6 +1457,30 @@ extension MedicineQuerySortBy on QueryBuilder<Medicine, Medicine, QSortBy> {
     });
   }
 
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByEndDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByIsActive() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByIsActiveDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.desc);
+    });
+  }
+
   QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1210,6 +1504,30 @@ extension MedicineQuerySortBy on QueryBuilder<Medicine, Medicine, QSortBy> {
       return query.addSortBy(r'notificationText', Sort.desc);
     });
   }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByNumberOfPills() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numberOfPills', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByNumberOfPillsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numberOfPills', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByStartDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByStartDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.desc);
+    });
+  }
 }
 
 extension MedicineQuerySortThenBy
@@ -1226,6 +1544,18 @@ extension MedicineQuerySortThenBy
     });
   }
 
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByEndDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<Medicine, Medicine, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1235,6 +1565,18 @@ extension MedicineQuerySortThenBy
   QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByIsActive() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByIsActiveDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isActive', Sort.desc);
     });
   }
 
@@ -1261,6 +1603,30 @@ extension MedicineQuerySortThenBy
       return query.addSortBy(r'notificationText', Sort.desc);
     });
   }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByNumberOfPills() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numberOfPills', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByNumberOfPillsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numberOfPills', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByStartDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByStartDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.desc);
+    });
+  }
 }
 
 extension MedicineQueryWhereDistinct
@@ -1269,6 +1635,18 @@ extension MedicineQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QDistinct> distinctByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'endDate');
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QDistinct> distinctByIsActive() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isActive');
     });
   }
 
@@ -1293,6 +1671,18 @@ extension MedicineQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Medicine, Medicine, QDistinct> distinctByNumberOfPills() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'numberOfPills');
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QDistinct> distinctByStartDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'startDate');
+    });
+  }
+
   QueryBuilder<Medicine, Medicine, QDistinct> distinctByUsageType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'usageType');
@@ -1314,6 +1704,18 @@ extension MedicineQueryProperty
     });
   }
 
+  QueryBuilder<Medicine, DateTime?, QQueryOperations> endDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'endDate');
+    });
+  }
+
+  QueryBuilder<Medicine, bool?, QQueryOperations> isActiveProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isActive');
+    });
+  }
+
   QueryBuilder<Medicine, String?, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
@@ -1330,6 +1732,18 @@ extension MedicineQueryProperty
       notificationTimesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'notificationTimes');
+    });
+  }
+
+  QueryBuilder<Medicine, int?, QQueryOperations> numberOfPillsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'numberOfPills');
+    });
+  }
+
+  QueryBuilder<Medicine, DateTime?, QQueryOperations> startDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'startDate');
     });
   }
 

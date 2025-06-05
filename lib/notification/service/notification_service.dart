@@ -25,7 +25,7 @@ class NotificationService {
 
     // Android ayarları
     const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
 
     // iOS ayarları
     const DarwinInitializationSettings iosSettings =
@@ -185,7 +185,7 @@ class NotificationService {
       return;
     }
 
-    final title = 'İlaç Zamanı!';
+    const  title = 'İlaç Zamanı!';
     final body = medicine.notificationText?.isNotEmpty == true
         ? medicine.notificationText!
         : '${medicine.name} alma zamanı geldi.';
@@ -367,12 +367,12 @@ class NotificationService {
     return await _notifications.pendingNotificationRequests();
   }
 
-  // Test bildirimi gönder
-  static Future<void> sendTestNotification() async {
-    await showInstantNotification(
-      id: 999999,
-      title: 'Test Bildirimi',
-      body: 'Bu bir test bildirimidir. Sesli bildirim çalışıyor mu?',
-    );
-  }
+  // // Test bildirimi gönder
+  // static Future<void> sendTestNotification() async {
+  //   await showInstantNotification(
+  //     id: 999999,
+  //     title: 'Test Bildirimi',
+  //     body: 'Bu bir test bildirimidir. Sesli bildirim çalışıyor mu?',
+  //   );
+  // }
 }
